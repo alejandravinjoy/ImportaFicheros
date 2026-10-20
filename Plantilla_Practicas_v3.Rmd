@@ -3,25 +3,25 @@ title: "Pon un título a tu documento"
 author: "Pon aquí tu nombre y apellidos"
 date: "`r Sys.Date()`"
 output:
+  pdf_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
   bookdown::pdf_document2:
     toc: true
     toc_depth: 3
     number_sections: true
     figure_caption: "Figura" # Referencias en castellano
     table_caption: "Tabla"
+  html_notebook:
+    echo: true
+    number_sections: true
+    toc: true
   html_document:
     echo: true
     number_sections: true
     theme: lumen
     toc: true
-  html_notebook:
-    echo: true
-    number_sections: true
-    toc: true
-  pdf_document:
-    toc: true
-    toc_depth: 3
-    number_sections: true
   bookdown::html_document2:
     echo: true
     number_sections: true
@@ -51,7 +51,7 @@ language:
     solution: 'Solución. '
 ---
 
-# 1.Introducción
+# Introducción
 
 Vamos a importar los siguientes ficheros
 
@@ -61,18 +61,18 @@ library(readxl)
 library(haven)
 library(jsonlite)
 
-Deposito.RData<-read_table("data/DFP1_11122015 124700.csv")
+#Deposito.RData<-read_table("data/DFP1_11122015 124700.csv")
 
-Pacientes.RData <- read_excel("data/subjectInfo.xlsx")
+#Pacientes.RData <- read_excel("data/subjectInfo.xlsx")
 
-PsychBike <- read_sav("data/PsychBike.sav")
+#PsychBike <- read_sav("data/PsychBike.sav")
 
 
 ```
 
-# 2 Ejemplo: fichero DFP1_11122015 124700.csv
+#  Ejemplo: fichero DFP1_11122015 124700.csv
 
-## 2.1 Importación del fichero
+##  Importación del fichero
 
 **2.1.1.**Usar la herramienta de importación para previsualizar el resultado final. Compara las opciones base y readr.
 
@@ -81,7 +81,7 @@ PsychBike <- read_sav("data/PsychBike.sav")
 ```{r}
 library(readr)
 fname <- 'data/DFP1_11122015 124700.csv'
-Deposito<-read.csv(fname,stringsAsFactors = FALSE,sep='\t')
+Deposito.RData<-read.csv(fname,stringsAsFactors = FALSE,sep='\t')
 ```
 
 **2.1.3.** Convertir fecha y hora
@@ -89,23 +89,23 @@ Deposito<-read.csv(fname,stringsAsFactors = FALSE,sep='\t')
 ```{r}
 library(hms)
 
-Deposito$FECHA<-as.POSIXlt(Deposito$FECHA,format="%d/%m/%Y")
+Deposito.RData$FECHA<-as.POSIXlt(Deposito.RData$FECHA,format="%d/%m/%Y")
 
-Deposito$HORA<-as.hms(Deposito$HORA)
+Deposito.RData$HORA<-as.hms(Deposito.RData$HORA)
 ```
 
 **2.1.4.** Almacenar con save en una carpeta con nombre results dentro de la carpeta dada
 
 ```{r}
-save(Deposito,file='data/results/Deposito.RData')
+save(Deposito.RData,file='data/results/Deposito.RData')
 ```
 
-## 2.2 Inspección de los datos
+##  Inspección de los datos
 
 Inspecciona los datos con str, head, tail y summary. Describid que informacion os proporciona cada uno de ellos.
 
 ```{r}
-str(Deposito)
+str(Deposito.RData)
 ```
 
 Tenemos un data frame con 8887 muestras, cada uno de 5 variables.
@@ -123,332 +123,204 @@ Combinacion_Canya: num
 Temperatura: num
 
 ```{r}
-head(Deposito)
+head(Deposito.RData)
 ```
 Tenemos alturas iguales en las 6 primeras muestras con 137.81, la misma combinacion_canya en 2, y la misma temperatura en 14.6. Las horas difieren pero en segundos
 
 ```{r}
-tail(Deposito)
+tail(Deposito.RData)
 ```
 Tenemos también alturas iguales en las 6 últimas muestras con 949.13, la misma combinacion_canya en 2, y la misma temperatura en 14.7. Las horas difieren también en 1 segundo
 
 ```{r}
 #para ver correctamente los necesito en numérico
-Deposito$HORA<-as.numeric(Deposito$HORA)
-summary(Deposito)
+Deposito.RData$HORA<-as.numeric(Deposito.RData$HORA)
+summary(Deposito.RData)
 ```
 Tenemos que 
 
 
 # Fichero Transactions from a Bakery (Kaggle)
 
-## 3.1 Importación del fichero
+##  Importación del fichero
 
 Utlizamos el IMPORT DATASET DE RSTUDIO, y hemos especificado las fechas como datos tipo datetime.
 ```{r}
 library(readr)
-bakery_sales_revised <- read_csv("data/bakery_sales_revised.csv", 
-    col_types = cols(date_time = col_datetime(format = "%m/%d/%Y %H:%M")))
-View(bakery_sales_revised)
+bakery_sales_revised.RData <- read_csv("data/bakery_sales_revised.csv")
+bakery_sales_revised.RData$date_time<-as.POSIXct(bakery_sales_revised.RData$date_time,format="%m/%d/%Y %H:%M")
 ```
 
 Ahora guardamos el dataframe en save
 
 ```{r}
-save(bakery_sales_revised,file='data/results/bakery_sales_revised')
+save(bakery_sales_revised.RData,file='data/results/bakery_sales_revised.RData')
 ```
 
+##  Inspección de los datos
 
-
-**NOTA**: Los espacios iniciales son imprescindibles. El documento debe empezar por los guiones (no puede haber comentarios previos)
-
-**title**: "Pon un título a tu documento"\
-**subtitle**: Tratamiento de Datos. Grado en Ciencia de Datos- UV\
-**author**: "Pon aquí tu nombre y apellidos"
-
-Pone la fecha de generación del documento
-
-**date**: "`r Sys.Date()`" Pondría la fecha del día actual. También se puede poner fija "01/02/2021"
-
-Cambio de idioma para que en lugar de "Contents" ponga "Indice" al incluir la tabla de contenido
-
-**params**: **lang**: ES\
-**lang**: "`r switch(params$lang, ES = 'es-ES', EN = 'en-US')`"
-
-En este ejemplo, por defecto se generará una salida html, que es la que está descomentada. Si si quieres otras salidas o varias de ellas descomenta lo que proceda
-
-**output:** Salida(s) generadas
-
-[*Salida pdf*]{.underline}*. Si se incluye código en LaTeX necesitarás tener instalado un compilador de Latex*\
-
-**pdf_document**:\
-**toc**: yes Tabla de contenido (índice)\
-**toc_depth**: 3 Número de niveles de la tabla de contenido (índice) \# 1, ##2,###3\
-**number_sections**: yes Numeración de las secciones
-
-[Salida html_document]{.underline}:\
-**echo**: yes **number_sections**: yes\
-**theme**: lumen Aspecto y estilo. Otras opciones: *cerulean, journal, flatly, darkly, readable, spacelab, united, cosmo, lumen, paper, sandstone, simplex, and yeti*\
-**toc**: yes
-
-[*Salida html_notebook*]{.underline}*, como html, pero con algunas opciones de visualización*
-
-**bookdown::html_document2:** Versión enriquecida de html que permite numerar figuras, referenciar, etc. <https://bookdown.org/yihui/bookdown/> **bookdown::pdf_document2:** Versión enriquecida de pdf que permite numerar figuras, referenciar, etc.
-
-Las opciones siguientes nos permiten traducir estas etiquetas para que aparezcan en otro idioma en caso de que se usen en el documento para referenciar a figuras, tablas, etc.
-
-**language:**\
-**label:** **fig:** 'Figura '\
-**tab:** 'Tabla '\
-**eq:** 'Ecuación '\
-**thm:** 'Teorema '\
-**lem:** 'Lema '\
-**def:** 'Definición '\
-**cor:** 'Corolario '\
-**prp:** 'Proposición '\
-**exm:** 'Ejemplo '\
-**exr:** 'Ejercicio '\
-**proof:** 'Demostración. '\
-**remark:** 'Nota: '\
-**solution:** 'Solución. '
-
-# Configuración del los bloques (*Chunks*)
-
-Cada bloque tiene muchos parámetros que pueden ser configurados
-
-**eval** = **FALSE** evita que el código se ejecute.
-
-**include** = **FALSE** evita que el código y los resultados aparezcan en el archivo terminado. R Markdown aún ejecuta el código en el fragmento y los resultados pueden ser utilizados por otros fragmentos.
-
-**echo = FALSE** evita que el código, pero no los resultados, aparezcan en el archivo terminado. Esta es una manera útil de incrustar figuras.
-
-**message = FALSE** evita que los mensajes generados por el código aparezcan en el archivo finalizado.
-
-**warning = FALSE** evita que las advertencias generadas por el código aparezcan en el final.
-
-**fig.cap = "..."** agrega un título a los resultados gráficos.
-
-Se pueden especificicar opciones generales por defecto en *opts_chunk\$set*
-
-Más opciones en el enlace [\<https://bookdown.org/yihui/rmarkdown/\>](https://bookdown.org/yihui/rmarkdown/){.uri}
-
-```{r setup, cache = F, echo = F, message = F, warning = F, tidy = F}
-
-
-# CONFIGURACIÓN GENERAL
-library(knitr)
-options(width = 100)
-
-# Opciones generales de los chucks. Se utilizarán salvo cambios en el chunk
-opts_chunk$set(echo=F, message = F, error = F, warning = F, comment = NA, fig.align = 'center', dpi = 200, tidy = F, cache.path = '.cache/', fig.path = './figura/')
-
-# Opciones generales de dígitos cuando se incluyen tablas
-#options(xtable.type = 'html')
-knit_hooks$set(inline = function(x) {
-  
-  if(is.numeric(x)) {
-    round(x, getOption('digits'))
-  } else {
-    paste(as.character(x), collapse = ', ')
-  }
-})
-#knit_hooks$set(plot = knitr:::hook_plot_html)
+Inspecciona los datos con str,head,tail,summary
+```{r}
+str(bakery_sales_revised.RData)
 ```
-
-# Instalación automática de paquetes
-
-Especificar las librerías necesarias para ejecutar el código en la variable ***packages***. Si no está instaladas, se instalarán y cargarán (solo para aquellas que están en el repositorio <http://cran.rediris.es>)
-
-El siguiente bloque, al no especificar opciones del *chunk* usa la configuración por defecto.
-
-```         
-# Asegúrate que el paquete "pacman" está instalado
-if (!require("pacman")) install.packages("pacman")
+```{r}
+head(bakery_sales_revised.RData)
 ```
-
-Utilizaremos la librería `pacman` (package manager) para gestionar la instalación de librerías. Es necesario que dicha librería esté instalada previamente.
-
-<https://epirhandbook.com/es/suggested-packages-1.html>
-
-```{r, message=FALSE}
-# Asegúrate que el paquete "pacman" está instalado
-if (!require("pacman")) install.packages("pacman")
-
-```
-
-Utilizamos la función `p_load` para la carga e instalación de paquetes
-
-```         
-pacman::p_load(
-     bookdown,
-     rio      # importación/exportación de múltiples tipos de datos
-     )
-```
-
-```{r,results=FALSE}
-
-# Paquetes disponibles desde CRAN
-#################################
-pacman::p_load(
-     
-     ###############
-     # Creación de libros y 
-     bookdown,
-     
-     # Manejo de archivos y proyecto 
-     ###############################
-     here,     # describir ruta de archivo dentro de la carpeta principal del proyecto
-     rio,      # importación/exportación de múltiples tipos de datos
-     openxlsx, # importación/exportación de libros con múltiples hojas de excel
-     
-     # Manejo e instalación de paquetes
-     ##################################
-     pacman,   # instalación/carga de paquetes
-     renv,     # manejo de versiones de paquetes para trabajar con grupos colaborativos.
-     remotes,  # instalación de paquetes desde github
-     
-     # Manejo general de datos
-     #########################
-     tidyverse,    # incluye múltiples paquetes para el tratamiento de datos en formato tidy y presentación de los mismos.
-          #dplyr,      # manejo de datos
-          #tidyr,      # manejo de datos
-          #ggplot2,    # visualización de datos
-          #stringr,    # trabajo con cadenas y caracteres
-          #forcats,    # trabajo con factores
-          #lubridate,  # trabajo con fechas
-          #purrr       # iteraciones y trabajo con listas
-     linelist,     # limpiar linelists
-     naniar,       # trabajo con valores perdidos
-     
-     # Estadística  
-     ############
-     janitor,      # tablas y limpieza de datos
-     gtsummary,    # hacer tablas descriptivas con valores estadísticos
-     rstatix,      # realización rápida de test estadísticos y tablas descriptivas
-     broom,        # pasar a formato tidy los resultados de las regresiones
-     lmtest,       # realizar test de likelihood-ratio
-    # easystats,
-    # parameters, # alternativa para pasar a formato tidy los resultados de las regresiones 
-    # see,        # alternativa para visualizar forest plots 
-     
-     # plots - general
-     #################
-     #ggplot2,         # incluido en tidyverse
-     cowplot,          # combinar plots  
-     # patchwork,      # alternativa para combinar plots    
-     RColorBrewer,     # escalas de color
-     ggnewscale,       # para añadir capas de color adicionales
-     
-     # plots - tipos específicos
-     ########################
-     DiagrammeR,       # diagramas empleando lenguaje DOT
-#     incidence2,       # curvas epidémicas
-#     gghighlight,      # destacar un subgrupo
-     ggrepel,          # etiquetas inteligentes (smart labels)
-     plotly,           # gráficos interactivos
-     gganimate,        # gráficos animados
-
-     
-     # gis
-     ######
-     # sf,               # manejo de datos espaciales usando el formato Simple Features
-     # tmap,             # producción sencilla de mapas, tanto estáticos como interactivos
-     # OpenStreetMap,    # añadir una base con un mapa de OSM a un mapa en ggplot
-     # spdep,            # estadística espacial
-     
-     # reportes rutinarios
-     #################
-     rmarkdown,        # producción de archivos PDF, Word, Powerpoint y HTML
-     reportfactory,    # auto-organización de los trabajos realizados en R Markdown 
-     officer,          # powerpoints
-     
-     # dashboards
-     ############
-     flexdashboard,    # convierte código de R Markdown en un dashboard
-     shiny,            # aplicaciones web interactivas
-
-     # tablas for para presentaciones
-     #########################
-     knitr,            # generación de reportes y tablas HTML con R Markdown 
-     flextable        # tablas HTML tables
-     #DT,              # tablas HTML (alternativa)
-     #gt,              # tablas HTML (alternativa)
-     #huxtable,        # tablas HTML (alternativa) 
-     
-)
-
-```
-
-# Trabaja con proyectos.
-
-<https://epirhandbook.com/es/r-projects.html>
-
-Para cada tarea crea un nuevo proyecto con, al menos, una carpeta *./data*, que contenga los datos (puedes usar carpetas adicionales para organizar la información **./program, /figuras**, etc). (La carpeta donde se encuentra este fichero es un proyecto)
-
-# Introducción del trabajo
-
-Haz un breve introducción indicando el contenido del documento:
-
-" El objetivo de esta *tarea/trabajo/práctica* es ... bla bla bla "
-
-## Subapartado (nivel 2 \##). Rutas locales
-
-Usa rutas referidas a la carpeta en la que se encuentra el fichero fuente, y siempre rutas **relativas** a dicha ubicación. Ejemplos
-
-**ruta1\<-'data/tabla1.txt'** : el fichero está en la carpeta datos que cuelga del directorio donde está el código.
-
-**ruta2\<-'./data/tabla1.txt'** : el fichero está en la carpeta datos que cuelga de un nivel superior
-
-**ruta3\<-'../data/tabla1.txt'** : el fichero está en la carpeta datos que cuelga del nivel superior
-
-**ruta4\<-'./../data/tabla1.txt'** : igual a la anterior
-
-**ruta4\<-'../../data/tabla1.txt'** : el fichero está en la carpeta datos que cuelga de dos niveles superiores
-
-<font color=red size=4>ruta5\<-'C:/MisDatos/Ej.txt' </font> **NO USAR NUNCA UNA RUTA ABSOLUTA COMO ESTA**
-
-### Subsubapartado (nivel 3 \###). Cómo incluir figuras
-
-Podemos especificar parámetros de tamaño y ubicación en el *chunk*
-
-<!-- ```{r rmarkdown, echo=FALSE,include=FALSE, out.width='30%', fig.align='center', fig.cap='Logo ETSE (desde archivo PNG).'} -->
-
-<!-- knitr::include_graphics("figure/logoETSE.png") -->
-
-<!-- ``` -->
-
-### Subsubapartado (nivel 3 \###).
-
-En este caso visualizamos el código. Observa como podemos incluir una figura y también ponerle un título
-
-```{r rmarkdown2, echo=TRUE, out.width='20%', fig.align='center', fig.cap='Logo GCD (desde archivo png).'}
-knitr::include_graphics("figure/logoEtse.png")
-```
-
-# Inclusión de ecuaciones
-
-Puedes incluir expresiones matemáticas usando la nomenclatura LaTeX por ejemplo:
-
-$ax^2+bx+c=0$
-
-### Subsubapartado (nivel 3 \###).
-
-Podemos referirnos a una figura haciendo referencia al nombre del chunk `\@ref(fig:chunk-name))`
-
-```{r newFig, echo=TRUE, out.width='60%', fig.align='center', fig.cap='Histograma.'}
-
-hist(rnorm(100000),breaks=100)
-
-```
-
-En la figura \@ref(fig:newFig) se muestra un histograma de una distribución normal.
-
-# Nuevo apartado nivel I \#
-
-Compila el proyecto como **pdf** y como **html** y observa el fichero obtenido. Cuando generes el documento **html**, observa el efecto de cambiar el valor **theme** por algún otro. Ten en cuenta que este parámetro solo se puede usar la salida **html**.
 
 ```{r}
+tail(bakery_sales_revised.RData)
+```
+
+```{r}
+summary(bakery_sales_revised.RData)
+```
+TENEMOS TRANSACTION SIENDO UN NUMERO UNICO PARA CADA TRANSACCION
+TENEMOS ITEM SIENDO CHARACTER Y TIPOS DE COMIDA
+TENEMOS DATETIME EN MODO FECHA CON AÑO-MES-DIA HORA:MINUTOS.SEGUNDOS
+TENEMOS PERIOD_DAY: AFTERNOON, MORNING
+TENEMOS WEEKDAY_WEEKEND
 
 
+#  Fichero SPSS PsychBike.sav
+
+##  Importación del fichero
+```{r}
+library(haven)
+
+PsychBike.RData <- read_sav("data/PsychBike.sav")
+save(PsychBike.RData,file='data/results/PsychBike.RData')
+```
+
+##  Inspección de los datos
+
+```{r}
+dim(PsychBike.RData)
+```
+TENEMOS 6 COL Y 2355 OBSERVACIONES/FILAS
+
+```{r}
+head(PsychBike.RData)
+```
+
+```{r}
+str(PsychBike.RData)
+```
+```{r}
+summary(PsychBike.RData)
+```
+**Conclusión**
+
+TENEMOS TIPO DE VEHICULO QUE VARIA DEL 1 al 7
+TENEMOS HORAS EN FORMATO HMS
+TENEMOS COLORES EXPRESADOS EN NUMEROS DEL 1 AL 99, SIENDO LA MEDIA 3
+TENEMOS HELMET VARIANDO ENTRE 0 Y 1, BINARIO. SI SE LLEVA O NO GORRO
+TENEMOS DISTANCIA FROM KERB 
+TENEMOS PASSING_DISTANCIA
+
+
+
+#   Fichero data iris.zip
+
+##  Descomprimir el fichero
+```{r}
+unzip(zipfile='data/iris.zip',exdir='data')
+```
+
+
+#  Fichero data iris.data
+
+##  Importación del fichero
+
+Utiliza la funcion read.table para importar los datos.
+```{r}
+iris<-read.table('data/iris.data',sep=',')
+save(iris,file='data/results/iris.RData')
+```
+
+Cambiar el nombre de las columnas
+```{r}
+names(iris)<- c(
+    "Sepal.Length",
+    "Sepal.Width",
+    "Petal.Length",
+    "Petal.Width",
+    "Species"
+  )
+```
+
+
+##  Inspección de los datos
+
+```{r}
+str(iris)
+```
+Tenemos 
+"Sepal.Length" siendo num
+  "Sepal.Width" siendo num
+    "Petal.Length" siendo num
+    "Petal.Width" siendo num
+    "Species" siendo chr 
+
+```{r}
+head(iris)
+```
+
+Tenemos de specie iris-setosa
+```{r}
+tail(iris)
+```
+Tenemos ahora a la iris-virginica
+
+```{r}
+summary(iris)
+```
+TENEMOS LOS MINIMOS Y MAXIMOS
+
+# Fichero JSON FileCodificado.json
+
+## Importación del fichero
+```{r}
+library(jsonlite)
+filename <- 'data/FileCodificado.json'
+FileCodificado<-read_json(filename, simplifyVector=TRUE)
+save(FileCodificado,file='data/results/FileCodificado.RData')
+```
+
+## Inspección de los datos
+```{r}
+dim(FileCodificado)
+```
+
+```{r}
+str(FileCodificado)
+head(FileCodificado)
+tail(FileCodificado)
+summary(FileCodificado)
+```
+# Fichero JSON iris_json.json
+```{r}
 
 ```
+
+## Importar el fichero iris_json.json
+```{r}
+iris_json<-read_json('data/iris_json.json', simplifyVector=TRUE)
+iris_json2<-fromJSON('data/iris_json.json')
+
+#Almacenar
+save(iris_json,file='data/results/iris_json.RData')
+```
+Ambas son iguales, pero es neceario el sumplifyVector para read_json
+
+## Inspección de los datos
+```{r}
+dim(iris_json)
+```
+
+```{r}
+str(iris_json)
+head(iris_json)
+tail(iris_json)
+summary(iris_json)
+```
+Tenemos 5 variables siendo estas Sepal length, sepal width, petal length, petal width, species, todas numericas menos species que indica que tipo de flor son 
